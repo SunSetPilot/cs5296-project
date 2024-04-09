@@ -16,11 +16,12 @@ func RegisterRoutes(server *gin.Engine, ctx *svc.ServiceContext) {
 	internalRoutes := server.Group("/api/v1/internal")
 	internalLogic := internal.NewInternalLogic(ctx)
 	internalRoutes.POST("/heartbeat", internalLogic.HeartBeat)
+	internalRoutes.GET("/get_tasks", internalLogic.GetTasks)
+	internalRoutes.POST("/report_task", internalLogic.ReportTask)
 
 	externalRoutes := server.Group("/api/v1/external")
 	externalLogic := external.NewExternalLogic(ctx)
 	externalRoutes.GET("/clients", externalLogic.GetClientList)
-	externalRoutes.GET("/tasks", externalLogic.GetTaskList)
 	externalRoutes.POST("/task/create", externalLogic.CreateTask)
-	externalRoutes.GET("/task/:id", externalLogic.GetTask)
+	externalRoutes.GET("/task", externalLogic.GetTask)
 }

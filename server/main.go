@@ -1,6 +1,7 @@
 package main
 
 import (
+	"cs5296-project/server/job"
 	"flag"
 	"fmt"
 
@@ -11,7 +12,7 @@ import (
 	"cs5296-project/server/svc"
 )
 
-var configFile = flag.String("f", "server.yaml", "the config file")
+var configFile = flag.String("f", "config.yaml", "the config file")
 
 func main() {
 	flag.Parse()
@@ -21,12 +22,17 @@ func main() {
 
 	ctx := svc.MustNewServiceContext(&c)
 
+	for _, j := range job.Jobs {
+		go j.Do(ctx)
+		fmt.Printf("Job %s started\n", j.GetName())
+	}
+
 	server := gin.Default()
 	api.RegisterRoutes(server, ctx)
 
 	fmt.Printf("Server is running on %s\n", c.ListenOn)
 	if err := server.Run(c.ListenOn); err != nil {
-		panic(err)
+		panic(fmt.Errorf("failed to start server: %w", err))
 	}
 
 }
