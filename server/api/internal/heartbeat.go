@@ -1,14 +1,16 @@
 package internal
 
 import (
-	"cs5296-project/server/model"
-	"cs5296-project/server/model/request"
-	"cs5296-project/server/utils"
-	"cs5296-project/server/utils/log"
 	"fmt"
-	"github.com/gin-gonic/gin"
 	"net/http"
 	"time"
+
+	"cs5296-project/model/request"
+	"cs5296-project/server/table"
+	"cs5296-project/utils"
+	"cs5296-project/utils/log"
+
+	"github.com/gin-gonic/gin"
 )
 
 func (l *Logic) HeartBeat(c *gin.Context) {
@@ -26,7 +28,7 @@ func (l *Logic) HeartBeat(c *gin.Context) {
 		return
 	}
 
-	clientModel := &model.TableClientModel{
+	clientModel := &table.TableClientModel{
 		PodName:      req.PodName,
 		PodUID:       req.PodUID,
 		PodIP:        req.PodIP,
@@ -37,7 +39,7 @@ func (l *Logic) HeartBeat(c *gin.Context) {
 		UpdateTime:   time.Now(),
 	}
 
-	err = model.TableClient.CreateOrUpdate(c.Request.Context(), clientModel)
+	err = table.TableClient.CreateOrUpdate(c.Request.Context(), clientModel)
 	if err != nil {
 		log.Errorf("HeartBeat failed to create or update client: %v", err)
 		rsp.RspError(http.StatusInternalServerError, fmt.Errorf("failed to create or update client"))

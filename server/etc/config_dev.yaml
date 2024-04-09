@@ -1,0 +1,6 @@
+DebugMode: true
+AppName: cs5296-project-server
+ListenOn: 0.0.0.0:8080
+MySQL: "root:123456@tcp(127.0.0.1:3306)/cs5269_project?charset=utf8mb4&parseTime=True&loc=Local"
+LogPath: ./logs
+ClientOfflineThreshold: 10

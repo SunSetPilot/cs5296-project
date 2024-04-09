@@ -1,14 +1,10 @@
-package model
+package table
 
 import (
 	"context"
 	"time"
-)
 
-const (
-	TASK_STATUS_CREATED = iota + 1
-	TASK_STATUS_RUNNING
-	TASK_STATUS_FINISHED
+	"cs5296-project/model"
 )
 
 var TableTask _TableTask
@@ -36,7 +32,7 @@ func (TableTaskModel) TableName() string {
 
 func (*_TableTask) GetTaskBySrcPodUID(ctx context.Context, srcPodUID string) ([]*TableTaskModel, error) {
 	var tasks []*TableTaskModel
-	err := DB.NewRequest(ctx).Where("src_pod_uid = ? and task_status = ?", srcPodUID, TASK_STATUS_CREATED).Find(&tasks).Error
+	err := DB.NewRequest(ctx).Where("src_pod_uid = ? and task_status = ?", srcPodUID, model.TASK_STATUS_CREATED).Find(&tasks).Error
 	if err != nil {
 		return nil, err
 	}

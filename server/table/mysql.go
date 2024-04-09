@@ -1,8 +1,9 @@
-package model
+package table
 
 import (
 	"context"
 	"fmt"
+
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 )

@@ -1,9 +1,10 @@
 package main
 
 import (
-	"cs5296-project/server/job"
 	"flag"
 	"fmt"
+
+	"cs5296-project/server/job"
 
 	"github.com/gin-gonic/gin"
 

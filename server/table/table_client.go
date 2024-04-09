@@ -1,15 +1,12 @@
-package model
+package table
 
 import (
 	"context"
-	"gorm.io/gorm/clause"
 	"time"
-)
 
-const (
-	CLIENT_STATUS_FREE = iota + 1
-	CLIENT_STATUS_BUSY
-	CLIENT_STATUS_OFFLINE
+	"gorm.io/gorm/clause"
+
+	"cs5296-project/model"
 )
 
 var TableClient _TableClient
@@ -45,7 +42,7 @@ func (*_TableClient) CreateOrUpdate(ctx context.Context, data *TableClientModel)
 
 func (*_TableClient) GetOnlineClientList(ctx context.Context) ([]*TableClientModel, error) {
 	var list []*TableClientModel
-	err := DB.NewRequest(ctx).Where("client_status <> ?", CLIENT_STATUS_OFFLINE).Find(&list).Error
+	err := DB.NewRequest(ctx).Where("client_status <> ?", model.CLIENT_STATUS_OFFLINE).Find(&list).Error
 	if err != nil {
 		return nil, err
 	}
@@ -54,12 +51,12 @@ func (*_TableClient) GetOnlineClientList(ctx context.Context) ([]*TableClientMod
 
 func (*_TableClient) UpdateOfflineClients(ctx context.Context) error {
 	clientModel := &TableClientModel{
-		ClientStatus: CLIENT_STATUS_OFFLINE,
+		ClientStatus: model.CLIENT_STATUS_OFFLINE,
 		UpdateTime:   time.Now(),
 	}
 	expireTime := clientModel.UpdateTime.Add(-time.Second * 10)
 	err := DB.NewRequest(ctx).
-		Where("update_time < ? AND client_status <> ?", expireTime, CLIENT_STATUS_OFFLINE).
+		Where("update_time < ? AND client_status <> ?", expireTime, model.CLIENT_STATUS_OFFLINE).
 		Updates(clientModel).Error
 	if err != nil {
 		return err

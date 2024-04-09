@@ -1,14 +1,16 @@
 package svc
 
 import (
-	"cs5296-project/server/model"
+	"cs5296-project/server/table"
+	"cs5296-project/utils/log"
+
 	"fmt"
 
 	"cs5296-project/server/config"
-	"cs5296-project/server/utils/log"
 )
 
 type ServiceContext struct {
+	SvcConf *config.Config
 }
 
 func MustNewServiceContext(c *config.Config) *ServiceContext {
@@ -26,9 +28,11 @@ func MustNewServiceContext(c *config.Config) *ServiceContext {
 		panic(fmt.Errorf("failed to create logger: %w", err))
 	}
 
-	err = model.InitDB(c.MySQL)
+	err = table.InitDB(c.MySQL)
 	if err != nil {
 		panic(fmt.Errorf("failed to init db: %w", err))
 	}
-	return &ServiceContext{}
+	return &ServiceContext{
+		SvcConf: c,
+	}
 }

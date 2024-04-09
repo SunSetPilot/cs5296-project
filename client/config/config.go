@@ -9,11 +9,9 @@ import (
 type Config struct {
 	DebugMode bool
 	AppName   string
-	ListenOn  string
-	MySQL     string
 	LogPath   string
 
-	ClientOfflineThreshold int
+	HeartbeatInterval int
 }
 
 func MustLoad(configFile string, config *Config) {

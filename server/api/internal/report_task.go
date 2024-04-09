@@ -1,14 +1,16 @@
 package internal
 
 import (
-	"cs5296-project/server/model"
-	"cs5296-project/server/model/request"
-	"cs5296-project/server/utils"
-	"cs5296-project/server/utils/log"
 	"fmt"
-	"github.com/gin-gonic/gin"
 	"net/http"
 	"time"
+
+	"cs5296-project/model/request"
+	"cs5296-project/server/table"
+	"cs5296-project/utils"
+	"cs5296-project/utils/log"
+
+	"github.com/gin-gonic/gin"
 )
 
 func (l *Logic) ReportTask(c *gin.Context) {
@@ -26,14 +28,14 @@ func (l *Logic) ReportTask(c *gin.Context) {
 		return
 	}
 
-	taskModel := &model.TableTaskModel{
+	taskModel := &table.TableTaskModel{
 		TaskID:     req.TaskID,
 		TaskStatus: req.TaskStatus,
 		TaskResult: req.TaskResult,
 		UpdateTime: time.Now(),
 	}
 
-	err = model.TableTask.UpdateByTaskID(c.Request.Context(), taskModel)
+	err = table.TableTask.UpdateByTaskID(c.Request.Context(), taskModel)
 	if err != nil {
 		log.Errorf("ReportTask failed to update task: %v", err)
 		rsp.RspError(http.StatusInternalServerError, fmt.Errorf("failed to update task"))

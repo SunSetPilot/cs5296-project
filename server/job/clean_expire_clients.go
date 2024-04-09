@@ -2,10 +2,11 @@ package job
 
 import (
 	"context"
-	"cs5296-project/server/model"
-	"cs5296-project/server/svc"
-	"cs5296-project/server/utils/log"
 	"time"
+
+	"cs5296-project/server/svc"
+	"cs5296-project/server/table"
+	"cs5296-project/utils/log"
 )
 
 func init() {
@@ -26,11 +27,11 @@ func (j *CleanExpireClientsJob) Do(ctx *svc.ServiceContext) {
 		}
 	}()
 	var err error
-	timer := time.NewTicker(10 * time.Second)
+	ticker := time.NewTicker(time.Duration(ctx.SvcConf.ClientOfflineThreshold) * time.Second)
 	for {
 		select {
-		case <-timer.C:
-			err = model.TableClient.UpdateOfflineClients(context.Background())
+		case <-ticker.C:
+			err = table.TableClient.UpdateOfflineClients(context.Background())
 			if err != nil {
 				log.Errorf("clean_expire_clients_job error: %v", err)
 			}

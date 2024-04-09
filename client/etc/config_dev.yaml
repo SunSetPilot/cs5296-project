@@ -1,0 +1,5 @@
+DebugMode: true
+AppName: cs5296-project-client
+LogPath: ./logs
+
+HeartbeatInterval: 1
