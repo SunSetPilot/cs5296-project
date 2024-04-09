@@ -1,5 +1,0 @@
-DebugMode: true
-AppName: cs5296-server
-ListenOn: 0.0.0.0:8080
-MySQL: "app_user:PLO75FbcfmFYRuQEGmygZ9PyQCQbmgeD5@tcp(10.112.1.114:3306)/simon?charset=utf8&parseTime=True&loc=Local&readTimeout=10s&timeout=10s&writeTimeout=10s"
-LogPath: ./logs
