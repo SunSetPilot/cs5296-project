@@ -1,7 +1,7 @@
 package job
 
 import (
-	"cs5296-project/client/svc"
+	"github.com/SunSetPilot/cs5296-project/client/svc"
 )
 
 var Jobs []Job

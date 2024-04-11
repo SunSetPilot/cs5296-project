@@ -1,6 +1,6 @@
 package job
 
-import "cs5296-project/server/svc"
+import "github.com/SunSetPilot/cs5296-project/server/svc"
 
 var Jobs []Job
 

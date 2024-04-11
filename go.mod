@@ -1,4 +1,4 @@
-module cs5296-project
+module github.com/SunSetPilot/cs5296-project
 
 go 1.20
 

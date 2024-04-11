@@ -4,9 +4,9 @@ import (
 	"context"
 	"time"
 
-	"cs5296-project/server/svc"
-	"cs5296-project/server/table"
-	"cs5296-project/utils/log"
+	"github.com/SunSetPilot/cs5296-project/server/dal"
+	"github.com/SunSetPilot/cs5296-project/server/svc"
+	"github.com/SunSetPilot/cs5296-project/utils/log"
 )
 
 func init() {
@@ -31,7 +31,7 @@ func (j *CleanExpireClientsJob) Do(ctx *svc.ServiceContext) {
 	for {
 		select {
 		case <-ticker.C:
-			err = table.TableClient.UpdateOfflineClients(context.Background())
+			err = dal.TableClient.UpdateOfflineClients(context.Background())
 			if err != nil {
 				log.Errorf("clean_expire_clients_job error: %v", err)
 			}

@@ -1,17 +1,8 @@
 package table
 
-import (
-	"context"
-	"time"
+import "time"
 
-	"cs5296-project/model"
-)
-
-var TableTask _TableTask
-
-type _TableTask struct{}
-
-type TableTaskModel struct {
+type TaskModel struct {
 	ID         uint32    `gorm:"column:id;type:int(11) unsigned;not null;primary_key;auto_increment;comment:'主键'"`
 	TaskID     string    `gorm:"column:task_id;type:varchar(255);not null;default:'';comment:'任务ID'"`
 	SrcPodUID  string    `gorm:"column:src_pod_uid;type:varchar(255);not null;default:'';comment:'源Pod唯一标识'"`
@@ -26,40 +17,6 @@ type TableTaskModel struct {
 	UpdateTime time.Time `gorm:"column:update_time;type:timestamp;not null;default:CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP;comment:'任务更新时间'"`
 }
 
-func (TableTaskModel) TableName() string {
+func (TaskModel) TableName() string {
 	return "table_task"
-}
-
-func (*_TableTask) GetTaskBySrcPodUID(ctx context.Context, srcPodUID string) ([]*TableTaskModel, error) {
-	var tasks []*TableTaskModel
-	err := DB.NewRequest(ctx).Where("src_pod_uid = ? and task_status = ?", srcPodUID, model.TASK_STATUS_CREATED).Find(&tasks).Error
-	if err != nil {
-		return nil, err
-	}
-	return tasks, nil
-}
-
-func (*_TableTask) BatchCreate(ctx context.Context, data []*TableTaskModel) error {
-	err := DB.NewRequest(ctx).CreateInBatches(data, len(data)).Error
-	if err != nil {
-		return err
-	}
-	return nil
-}
-
-func (*_TableTask) UpdateByTaskID(ctx context.Context, data *TableTaskModel) error {
-	err := DB.NewRequest(ctx).Where("task_id = ?", data.TaskID).Updates(data).Error
-	if err != nil {
-		return err
-	}
-	return nil
-}
-
-func (*_TableTask) GetTaskByTaskID(ctx context.Context, taskID string) (*TableTaskModel, error) {
-	var task TableTaskModel
-	err := DB.NewRequest(ctx).Where("task_id = ?", taskID).First(&task).Error
-	if err != nil {
-		return nil, err
-	}
-	return &task, nil
 }

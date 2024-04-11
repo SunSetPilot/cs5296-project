@@ -1,7 +1,7 @@
 package external
 
 import (
-	"cs5296-project/server/svc"
+	"github.com/SunSetPilot/cs5296-project/server/svc"
 )
 
 type Logic struct {

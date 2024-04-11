@@ -4,17 +4,18 @@ import (
 	"fmt"
 	"net/http"
 
-	"cs5296-project/server/table"
-	"cs5296-project/utils"
-	"cs5296-project/utils/log"
-
 	"github.com/gin-gonic/gin"
+
+	"github.com/SunSetPilot/cs5296-project/model/table"
+	"github.com/SunSetPilot/cs5296-project/server/dal"
+	"github.com/SunSetPilot/cs5296-project/utils"
+	"github.com/SunSetPilot/cs5296-project/utils/log"
 )
 
 func (l *Logic) GetTasks(c *gin.Context) {
 	var (
 		rsp   *utils.Rsp
-		tasks []*table.TableTaskModel
+		tasks []*table.TaskModel
 		err   error
 	)
 	rsp = utils.NewRsp(c)
@@ -26,7 +27,7 @@ func (l *Logic) GetTasks(c *gin.Context) {
 		return
 	}
 
-	tasks, err = table.TableTask.GetTaskBySrcPodUID(c.Request.Context(), podUID)
+	tasks, err = dal.TableTask.GetTaskBySrcPodUID(c.Request.Context(), podUID)
 	if err != nil {
 		log.Errorf("GetTasks failed to get tasks: %v", err)
 		rsp.RspError(http.StatusInternalServerError, fmt.Errorf("failed to get tasks"))

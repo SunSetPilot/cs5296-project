@@ -5,12 +5,13 @@ import (
 	"net/http"
 	"time"
 
-	"cs5296-project/model/request"
-	"cs5296-project/server/table"
-	"cs5296-project/utils"
-	"cs5296-project/utils/log"
-
 	"github.com/gin-gonic/gin"
+
+	"github.com/SunSetPilot/cs5296-project/model/request"
+	"github.com/SunSetPilot/cs5296-project/model/table"
+	"github.com/SunSetPilot/cs5296-project/server/dal"
+	"github.com/SunSetPilot/cs5296-project/utils"
+	"github.com/SunSetPilot/cs5296-project/utils/log"
 )
 
 func (l *Logic) ReportTask(c *gin.Context) {
@@ -28,14 +29,14 @@ func (l *Logic) ReportTask(c *gin.Context) {
 		return
 	}
 
-	taskModel := &table.TableTaskModel{
+	taskModel := &table.TaskModel{
 		TaskID:     req.TaskID,
 		TaskStatus: req.TaskStatus,
 		TaskResult: req.TaskResult,
 		UpdateTime: time.Now(),
 	}
 
-	err = table.TableTask.UpdateByTaskID(c.Request.Context(), taskModel)
+	err = dal.TableTask.UpdateByTaskID(c.Request.Context(), taskModel)
 	if err != nil {
 		log.Errorf("ReportTask failed to update task: %v", err)
 		rsp.RspError(http.StatusInternalServerError, fmt.Errorf("failed to update task"))

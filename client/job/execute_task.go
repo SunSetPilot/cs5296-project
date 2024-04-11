@@ -1,22 +1,16 @@
 package job
 
 import (
-	"cs5296-project/client/svc"
-	"cs5296-project/utils/log"
+	"github.com/SunSetPilot/cs5296-project/client/pool"
+	"github.com/SunSetPilot/cs5296-project/client/svc"
+	"github.com/SunSetPilot/cs5296-project/utils/log"
 )
 
 func init() {
 	Jobs = append(Jobs, &ExecuteTaskJob{})
 }
 
-type Task struct {
-	TaskID    string
-	TargetIP  string
-	TaskParam string
-}
-
 type ExecuteTaskJob struct {
-	taskChan chan *Task
 }
 
 func (j *ExecuteTaskJob) GetName() string {
@@ -29,5 +23,7 @@ func (j *ExecuteTaskJob) Do(ctx *svc.ServiceContext) {
 			log.Errorf("%s panic: %v", j.GetName(), r)
 		}
 	}()
+	execPool := pool.NewCommandExecPool(ctx.SvcConf.ExecPoolSize)
+	execPool.Start()
 
 }

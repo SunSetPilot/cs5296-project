@@ -3,9 +3,9 @@ package api
 import (
 	"github.com/gin-gonic/gin"
 
-	"cs5296-project/server/api/external"
-	"cs5296-project/server/api/internal"
-	"cs5296-project/server/svc"
+	"github.com/SunSetPilot/cs5296-project/server/api/external"
+	"github.com/SunSetPilot/cs5296-project/server/api/internal"
+	"github.com/SunSetPilot/cs5296-project/server/svc"
 )
 
 func RegisterRoutes(server *gin.Engine, ctx *svc.ServiceContext) {

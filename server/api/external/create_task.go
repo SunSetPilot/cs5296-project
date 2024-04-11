@@ -5,14 +5,15 @@ import (
 	"net/http"
 	"time"
 
-	"cs5296-project/model"
-	"cs5296-project/model/request"
-	"cs5296-project/server/table"
-	"cs5296-project/utils"
-	"cs5296-project/utils/log"
-
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
+
+	"github.com/SunSetPilot/cs5296-project/model"
+	"github.com/SunSetPilot/cs5296-project/model/request"
+	"github.com/SunSetPilot/cs5296-project/model/table"
+	"github.com/SunSetPilot/cs5296-project/server/dal"
+	"github.com/SunSetPilot/cs5296-project/utils"
+	"github.com/SunSetPilot/cs5296-project/utils/log"
 )
 
 func (l *Logic) CreateTask(c *gin.Context) {
@@ -30,9 +31,9 @@ func (l *Logic) CreateTask(c *gin.Context) {
 		return
 	}
 
-	taskModels := make([]*table.TableTaskModel, 0)
+	taskModels := make([]*table.TaskModel, 0)
 	for _, task := range req {
-		taskModels = append(taskModels, &table.TableTaskModel{
+		taskModels = append(taskModels, &table.TaskModel{
 			TaskID:     uuid.NewString(),
 			SrcPodIP:   task.SrcPodIP,
 			SrcPodUID:  task.SrcPodUID,
@@ -47,7 +48,7 @@ func (l *Logic) CreateTask(c *gin.Context) {
 
 	}
 
-	err = table.TableTask.BatchCreate(c.Request.Context(), taskModels)
+	err = dal.TableTask.BatchCreate(c.Request.Context(), taskModels)
 	if err != nil {
 		log.Errorf("CreateTask failed to batch create task: %v", err)
 		rsp.RspError(http.StatusInternalServerError, fmt.Errorf("failed to create task"))

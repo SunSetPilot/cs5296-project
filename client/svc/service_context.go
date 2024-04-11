@@ -5,9 +5,9 @@ import (
 	"os"
 	"sync/atomic"
 
-	"cs5296-project/client/config"
-	"cs5296-project/model"
-	"cs5296-project/utils/log"
+	"github.com/SunSetPilot/cs5296-project/client/config"
+	"github.com/SunSetPilot/cs5296-project/model"
+	"github.com/SunSetPilot/cs5296-project/utils/log"
 )
 
 type ServiceContext struct {

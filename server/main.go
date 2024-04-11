@@ -4,13 +4,12 @@ import (
 	"flag"
 	"fmt"
 
-	"cs5296-project/server/job"
-
 	"github.com/gin-gonic/gin"
 
-	"cs5296-project/server/api"
-	"cs5296-project/server/config"
-	"cs5296-project/server/svc"
+	"github.com/SunSetPilot/cs5296-project/server/api"
+	"github.com/SunSetPilot/cs5296-project/server/config"
+	"github.com/SunSetPilot/cs5296-project/server/job"
+	"github.com/SunSetPilot/cs5296-project/server/svc"
 )
 
 var configFile = flag.String("f", "config.yaml", "the config file")

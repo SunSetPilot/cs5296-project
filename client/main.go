@@ -7,9 +7,9 @@ import (
 	"os/signal"
 	"syscall"
 
-	"cs5296-project/client/config"
-	"cs5296-project/client/job"
-	"cs5296-project/client/svc"
+	"github.com/SunSetPilot/cs5296-project/client/config"
+	"github.com/SunSetPilot/cs5296-project/client/job"
+	"github.com/SunSetPilot/cs5296-project/client/svc"
 )
 
 var configFile = flag.String("f", "config.yaml", "the config file")

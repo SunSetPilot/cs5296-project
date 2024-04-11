@@ -12,6 +12,7 @@ type Config struct {
 	LogPath   string
 
 	HeartbeatInterval int
+	ExecPoolSize      int
 }
 
 func MustLoad(configFile string, config *Config) {

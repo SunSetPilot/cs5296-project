@@ -5,12 +5,13 @@ import (
 	"net/http"
 	"time"
 
-	"cs5296-project/model/request"
-	"cs5296-project/server/table"
-	"cs5296-project/utils"
-	"cs5296-project/utils/log"
-
 	"github.com/gin-gonic/gin"
+
+	"github.com/SunSetPilot/cs5296-project/model/request"
+	"github.com/SunSetPilot/cs5296-project/model/table"
+	"github.com/SunSetPilot/cs5296-project/server/dal"
+	"github.com/SunSetPilot/cs5296-project/utils"
+	"github.com/SunSetPilot/cs5296-project/utils/log"
 )
 
 func (l *Logic) HeartBeat(c *gin.Context) {
@@ -28,7 +29,7 @@ func (l *Logic) HeartBeat(c *gin.Context) {
 		return
 	}
 
-	clientModel := &table.TableClientModel{
+	clientModel := &table.ClientModel{
 		PodName:      req.PodName,
 		PodUID:       req.PodUID,
 		PodIP:        req.PodIP,
@@ -39,7 +40,7 @@ func (l *Logic) HeartBeat(c *gin.Context) {
 		UpdateTime:   time.Now(),
 	}
 
-	err = table.TableClient.CreateOrUpdate(c.Request.Context(), clientModel)
+	err = dal.TableClient.CreateOrUpdate(c.Request.Context(), clientModel)
 	if err != nil {
 		log.Errorf("HeartBeat failed to create or update client: %v", err)
 		rsp.RspError(http.StatusInternalServerError, fmt.Errorf("failed to create or update client"))

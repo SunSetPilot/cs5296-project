@@ -1,12 +1,11 @@
 package svc
 
 import (
-	"cs5296-project/server/table"
-	"cs5296-project/utils/log"
-
 	"fmt"
 
-	"cs5296-project/server/config"
+	"github.com/SunSetPilot/cs5296-project/server/config"
+	"github.com/SunSetPilot/cs5296-project/server/dal"
+	"github.com/SunSetPilot/cs5296-project/utils/log"
 )
 
 type ServiceContext struct {
@@ -28,7 +27,7 @@ func MustNewServiceContext(c *config.Config) *ServiceContext {
 		panic(fmt.Errorf("failed to create logger: %w", err))
 	}
 
-	err = table.InitDB(c.MySQL)
+	err = dal.InitDB(c.MySQL)
 	if err != nil {
 		panic(fmt.Errorf("failed to init db: %w", err))
 	}
