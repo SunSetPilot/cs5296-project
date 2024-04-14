@@ -10,4 +10,11 @@ const (
 	TASK_STATUS_CREATED = iota + 1
 	TASK_STATUS_RUNNING
 	TASK_STATUS_FINISHED
+	TASK_STATUS_FAILED
+)
+
+const (
+	TASK_TYPE_PING       = "ping"
+	TASK_TYPE_IPERF      = "iperf"
+	TASK_TYPE_TRACEROUTE = "traceroute"
 )
