@@ -19,7 +19,7 @@ func (l *Logic) GetClientList(c *gin.Context) {
 		err     error
 	)
 	rsp = utils.NewRsp(c)
-
+	log.Infof("GetClientList request")
 	clients, err = dal.TableClient.GetOnlineClientList(c.Request.Context())
 	if err != nil {
 		log.Errorf("GetClientList failed to get clients: %v", err)

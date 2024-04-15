@@ -25,6 +25,7 @@ func (l *Logic) CreateTask(c *gin.Context) {
 	rsp = utils.NewRsp(c)
 
 	err = c.BindJSON(&req)
+	log.Infof("CreateTask request: %v", req)
 	if err != nil {
 		log.Errorf("CreateTask failed to bind request: %v", err)
 		rsp.RspError(http.StatusBadRequest, fmt.Errorf("invalid request"))

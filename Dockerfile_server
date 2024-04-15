@@ -1,0 +1,23 @@
+FROM golang:1.20 as builder
+
+ENV GO111MODULE=on
+
+WORKDIR /app
+
+COPY . .
+
+RUN go build -o server.bin ./server/main.go
+
+RUN mkdir output && cp server.bin output/ && cp -r server/etc output/
+
+FROM ubuntu:latest
+
+WORKDIR /app
+
+COPY --from=builder /app/output .
+
+RUN mkdir /app/logs
+
+ENV GIN_MODE=release
+
+CMD ["/app/server.bin", "-f", "/app/etc/config.yaml"]

@@ -31,12 +31,15 @@ func (j *ExecuteTaskJob) Do(ctx *svc.ServiceContext) {
 			log.Errorf("%s panic: %v", j.GetName(), r)
 		}
 	}()
+	log.Debugf("execute_task_job started")
 	execPool := pool.NewCommandExecPool(ctx.SvcConf.ExecPoolSize)
 	execPool.Start()
+	log.Debugf("execute_task_job command exec pool started")
 
 	for {
 		select {
 		case result := <-execPool.Out:
+			log.Infof("execute_task_job command execute finished: %s", result.ID)
 			if result.Err != nil {
 				log.Errorf("execute_task_job command execute failed: %v, task_id: %s", result.Err, result.ID)
 				err := reportTask(ctx, &request.ReportTaskRequest{
@@ -48,6 +51,7 @@ func (j *ExecuteTaskJob) Do(ctx *svc.ServiceContext) {
 					log.Errorf("execute_task_job report task failed: %v", err)
 				}
 			} else {
+				log.Infof("execute_task_job report success task_id: %s", result.ID)
 				err := reportTask(ctx, &request.ReportTaskRequest{
 					TaskID:     result.ID,
 					TaskStatus: model.TASK_STATUS_FINISHED,
@@ -59,11 +63,13 @@ func (j *ExecuteTaskJob) Do(ctx *svc.ServiceContext) {
 			}
 		default:
 			time.Sleep(time.Second)
+			log.Debugf("execute_task_job fetch tasks")
 			tasks, err := fetchTasks(ctx)
 			if err != nil {
 				log.Errorf("execute_task_job fetch tasks failed: %v", err)
 				continue
 			}
+			log.Infof("execute_task_job fetch tasks number: %d", len(tasks))
 			for _, task := range tasks {
 				if execPool.IsFull() {
 					break
@@ -82,6 +88,7 @@ func (j *ExecuteTaskJob) Do(ctx *svc.ServiceContext) {
 					Name: task.TaskType,
 					Args: []string{destArg, task.TaskParam},
 				}
+				log.Infof("execute_task_job command execute started: %s", task.TaskID)
 				err = reportTask(ctx, &request.ReportTaskRequest{
 					TaskID:     task.TaskID,
 					TaskStatus: model.TASK_STATUS_RUNNING,

@@ -27,14 +27,14 @@ func (j *CleanExpireClientsJob) Do(ctx *svc.ServiceContext) {
 		}
 	}()
 	var err error
-	ticker := time.NewTicker(time.Duration(ctx.SvcConf.ClientOfflineThreshold) * time.Second)
+
 	for {
-		select {
-		case <-ticker.C:
-			err = dal.TableClient.UpdateOfflineClients(context.Background())
-			if err != nil {
-				log.Errorf("clean_expire_clients_job error: %v", err)
-			}
+		time.Sleep(3 * time.Second)
+		log.Debugf("clean_expire_clients_job running")
+		err = dal.TableClient.UpdateOfflineClients(context.Background(), ctx.SvcConf.ClientOfflineThreshold)
+		if err != nil {
+			log.Errorf("clean_expire_clients_job error: %v", err)
 		}
+		log.Debugf("clean_expire_clients_job done")
 	}
 }

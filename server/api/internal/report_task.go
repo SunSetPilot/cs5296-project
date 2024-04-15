@@ -23,6 +23,7 @@ func (l *Logic) ReportTask(c *gin.Context) {
 	rsp = utils.NewRsp(c)
 
 	err = c.BindJSON(&req)
+	log.Infof("ReportTask request: %v", req)
 	if err != nil {
 		log.Errorf("ReportTask failed to bind request: %v", err)
 		rsp.RspError(http.StatusBadRequest, fmt.Errorf("invalid request"))

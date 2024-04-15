@@ -21,6 +21,7 @@ func (l *Logic) GetTasks(c *gin.Context) {
 	rsp = utils.NewRsp(c)
 
 	podUID := c.Query("pod_uid")
+	log.Infof("GetTasks request: %v", podUID)
 	if podUID == "" {
 		log.Errorf("pod_uid is required")
 		rsp.RspError(http.StatusBadRequest, fmt.Errorf("pod_uid is required"))

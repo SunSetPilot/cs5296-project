@@ -21,6 +21,7 @@ func (l *Logic) GetTask(c *gin.Context) {
 	rsp = utils.NewRsp(c)
 
 	taskID := c.Query("task_id")
+	log.Infof("GetTask request: %v", taskID)
 	if taskID == "" {
 		log.Errorf("task_id is required")
 		rsp.RspError(http.StatusBadRequest, fmt.Errorf("task_id is required"))

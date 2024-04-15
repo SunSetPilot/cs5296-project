@@ -21,8 +21,10 @@ func (l *Logic) HeartBeat(c *gin.Context) {
 		err error
 	)
 	rsp = utils.NewRsp(c)
-
 	err = c.BindJSON(&req)
+
+	log.Infof("HeartBeat request: %v", req)
+
 	if err != nil {
 		log.Errorf("HeartBeat failed to bind request: %v", err)
 		rsp.RspError(http.StatusBadRequest, fmt.Errorf("invalid request"))

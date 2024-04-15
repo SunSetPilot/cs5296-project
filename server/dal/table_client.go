@@ -34,12 +34,12 @@ func (*_TableClient) GetOnlineClientList(ctx context.Context) ([]*table.ClientMo
 	return list, nil
 }
 
-func (*_TableClient) UpdateOfflineClients(ctx context.Context) error {
+func (*_TableClient) UpdateOfflineClients(ctx context.Context, threshold int) error {
 	clientModel := &table.ClientModel{
 		ClientStatus: model.CLIENT_STATUS_OFFLINE,
 		UpdateTime:   time.Now(),
 	}
-	expireTime := clientModel.UpdateTime.Add(-time.Second * 10)
+	expireTime := clientModel.UpdateTime.Add(-time.Second * time.Duration(threshold))
 	err := DB.NewRequest(ctx).
 		Where("update_time < ? AND client_status <> ?", expireTime, model.CLIENT_STATUS_OFFLINE).
 		Updates(clientModel).Error

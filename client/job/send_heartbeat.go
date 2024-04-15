@@ -28,6 +28,7 @@ func (j *SendHeartbeatJob) Do(ctx *svc.ServiceContext) {
 		}
 	}()
 	for {
+		log.Infof("send heartbeat to server: %s", ctx.ServerAddr)
 		sendHeartbeat(ctx)
 		time.Sleep(time.Duration(ctx.SvcConf.HeartbeatInterval) * time.Second)
 	}

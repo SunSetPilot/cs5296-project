@@ -3,6 +3,7 @@ package svc
 import (
 	"fmt"
 	"os"
+	"os/exec"
 	"sync/atomic"
 
 	"github.com/SunSetPilot/cs5296-project/client/config"
@@ -65,6 +66,17 @@ func MustNewServiceContext(c *config.Config) *ServiceContext {
 	svcCtx.ServerAddr = os.Getenv("SERVER_ADDR")
 	if svcCtx.ServerAddr == "" {
 		panic("SERVER_ADDR env is empty")
+	}
+
+	iperfCmdTcp := exec.Command("iperf", "-s")
+	err = iperfCmdTcp.Start()
+	if err != nil {
+		panic("failed to start iperf tcp server")
+	}
+	iperfCmdUdp := exec.Command("iperf", "-s", "-u")
+	err = iperfCmdUdp.Start()
+	if err != nil {
+		panic("failed to start iperf udp server")
 	}
 
 	return svcCtx
