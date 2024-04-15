@@ -2,6 +2,7 @@ package svc
 
 import (
 	"fmt"
+	"os"
 
 	"github.com/SunSetPilot/cs5296-project/server/config"
 	"github.com/SunSetPilot/cs5296-project/server/dal"
@@ -27,6 +28,9 @@ func MustNewServiceContext(c *config.Config) *ServiceContext {
 		panic(fmt.Errorf("failed to create logger: %w", err))
 	}
 
+	if os.Getenv("MYSQL_DSN") != "" {
+		c.MySQL = os.Getenv("MYSQL_DSN")
+	}
 	err = dal.InitDB(c.MySQL)
 	if err != nil {
 		panic(fmt.Errorf("failed to init db: %w", err))
