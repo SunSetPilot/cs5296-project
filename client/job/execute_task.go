@@ -3,6 +3,7 @@ package job
 import (
 	"encoding/json"
 	"fmt"
+	"strings"
 	"time"
 
 	"github.com/SunSetPilot/cs5296-project/client/pool"
@@ -74,19 +75,20 @@ func (j *ExecuteTaskJob) Do(ctx *svc.ServiceContext) {
 				if execPool.IsFull() {
 					break
 				}
-				var destArg string
+				var argsStr string
 				if task.TaskType == model.TASK_TYPE_PING || task.TaskType == model.TASK_TYPE_TRACEROUTE {
-					destArg = task.DstPodIP
+					argsStr = fmt.Sprintf(" %s ", task.DstPodIP)
 				} else if task.TaskType == model.TASK_TYPE_IPERF {
-					destArg = "-c " + task.DstPodIP
+					argsStr = fmt.Sprintf(" -c %s ", task.DstPodIP)
 				} else {
 					log.Errorf("execute_task_job invalid task type: %s", task.TaskType)
 					continue
 				}
+				argsStr += task.TaskParam
 				execPool.In <- &pool.Command{
 					ID:   task.TaskID,
 					Name: task.TaskType,
-					Args: []string{destArg, task.TaskParam},
+					Args: strings.Split(argsStr, " "),
 				}
 				log.Infof("execute_task_job command execute started: %s", task.TaskID)
 				err = reportTask(ctx, &request.ReportTaskRequest{
