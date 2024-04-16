@@ -1,0 +1,46 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cs5296-server-deployment
+  namespace: default
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: cs5296-server
+  template:
+    metadata:
+      labels:
+        app: cs5296-server
+    spec:
+      containers:
+        - name: cs5296-server
+          image: ahussp/cs5296-server
+          ports:
+            - containerPort: 8080
+          livenessProbe:
+            httpGet:
+              path: /healthz
+              port: 8080
+            initialDelaySeconds: 3
+            periodSeconds: 3
+          env:
+            - name: MYSQL_DSN
+              value: "root:woshilaowei813@tcp(mysql.default.svc.cluster.local:3306)/cs5269_project?charset=utf8mb4&parseTime=True&loc=Local"
+
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: cs5296-server-service
+  namespace: default
+spec:
+  ports:
+    - port: 80
+      targetPort: 8080
+      protocol: TCP
+      nodePort: 30001
+  type: NodePort
+  selector:
+    app: cs5296-server
