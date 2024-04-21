@@ -1,6 +1,6 @@
-DebugMode: true
+DebugMode: false
 AppName: cs5296-project-client
-LogPath: ./logs
+LogPath: /app/logs
 
 HeartbeatInterval: 1
 FetchTaskInterval: 1
