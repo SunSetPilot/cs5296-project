@@ -58,18 +58,6 @@ func HttpRequest(method, url, data string, params, headers map[string]string, js
 func MockHttpClient() {
 	httpmock.ActivateNonDefault(client.GetClient())
 
-	// mock heartbeat response
-	heartbeatResponder, _ := httpmock.NewJsonResponder(200, Rsp{
-		Status: 0,
-		Msg:    "",
-		Data:   nil,
-	})
-	httpmock.RegisterResponder(
-		"POST",
-		"http://server.mock:8080/api/v1/internal/heartbeat",
-		heartbeatResponder,
-	)
-
 	// mock report_task response
 	reportTaskResponder, _ := httpmock.NewJsonResponder(200, Rsp{
 		Status: 0,

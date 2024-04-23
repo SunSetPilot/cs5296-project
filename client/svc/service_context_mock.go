@@ -10,7 +10,7 @@ import (
 	"github.com/SunSetPilot/cs5296-project/utils/log"
 )
 
-func NewMockServiceContext() *ServiceContext {
+func NewMockServiceContext(httpMock bool) *ServiceContext {
 	var (
 		logLevel string
 		err      error
@@ -37,6 +37,8 @@ func NewMockServiceContext() *ServiceContext {
 	svcCtx.NodeIP = "127.0.0.1"
 	svcCtx.ServerAddr = "http://server.mock:8080"
 
-	utils.MockHttpClient()
+	if httpMock {
+		utils.MockHttpClient()
+	}
 	return svcCtx
 }
