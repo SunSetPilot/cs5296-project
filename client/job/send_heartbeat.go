@@ -2,6 +2,7 @@ package job
 
 import (
 	"encoding/json"
+	"fmt"
 	"time"
 
 	"github.com/SunSetPilot/cs5296-project/client/svc"
@@ -29,12 +30,15 @@ func (j *SendHeartbeatJob) Do(ctx *svc.ServiceContext) {
 	}()
 	for {
 		log.Infof("send heartbeat to server: %s", ctx.ServerAddr)
-		sendHeartbeat(ctx)
+		err := sendHeartbeat(ctx)
+		if err != nil {
+			log.Errorf("send heartbeat failed: %v", err)
+		}
 		time.Sleep(time.Duration(ctx.SvcConf.HeartbeatInterval) * time.Second)
 	}
 }
 
-func sendHeartbeat(ctx *svc.ServiceContext) {
+func sendHeartbeat(ctx *svc.ServiceContext) error {
 	req := &request.HeartbeatRequest{
 		PodName:      ctx.PodName,
 		PodUID:       ctx.PodUID,
@@ -45,7 +49,7 @@ func sendHeartbeat(ctx *svc.ServiceContext) {
 	}
 	data, err := json.Marshal(req)
 	if err != nil {
-		log.Errorf("send_heartbeat_job json marshal failed: %v", err)
+		return fmt.Errorf("send_heartbeat_job json marshal failed: %v", err)
 	}
 	_, err = utils.HttpRequest(
 		"POST",
@@ -56,6 +60,7 @@ func sendHeartbeat(ctx *svc.ServiceContext) {
 		false,
 	)
 	if err != nil {
-		log.Errorf("send_heartbeat_job http request failed: %v", err)
+		return fmt.Errorf("send_heartbeat_job http request failed: %v", err)
 	}
+	return nil
 }

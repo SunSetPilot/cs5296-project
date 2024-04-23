@@ -83,20 +83,24 @@ func MockHttpClient() {
 	)
 
 	// mock fetch_tasks response
-	fetchTasksResponder, _ := httpmock.NewJsonResponder(200, []*table.TaskModel{
-		{
-			ID:         1,
-			TaskID:     uuid.NewString(),
-			SrcPodUID:  "src-pod-uid",
-			SrcPodIP:   "127.0.0.1",
-			DstPodUID:  "dst-pod-uid",
-			DstPodIP:   "127.0.0.1",
-			TaskParam:  "task-param",
-			TaskType:   "ping",
-			TaskStatus: model.TASK_STATUS_CREATED,
-			TaskResult: "",
-			CreateTime: time.Now(),
-			UpdateTime: time.Now(),
+	fetchTasksResponder, _ := httpmock.NewJsonResponder(200, Rsp{
+		Status: 0,
+		Msg:    "",
+		Data: []*table.TaskModel{
+			{
+				ID:         1,
+				TaskID:     uuid.NewString(),
+				SrcPodUID:  "src-pod-uid",
+				SrcPodIP:   "127.0.0.1",
+				DstPodUID:  "dst-pod-uid",
+				DstPodIP:   "127.0.0.1",
+				TaskParam:  "task-param",
+				TaskType:   "ping",
+				TaskStatus: model.TASK_STATUS_CREATED,
+				TaskResult: "",
+				CreateTime: time.Now(),
+				UpdateTime: time.Now(),
+			},
 		},
 	})
 	httpmock.RegisterResponder(
