@@ -1,6 +1,8 @@
 package api
 
 import (
+	"net/http"
+
 	"github.com/gin-gonic/gin"
 
 	"github.com/SunSetPilot/cs5296-project/server/api/external"
@@ -10,7 +12,7 @@ import (
 
 func RegisterRoutes(server *gin.Engine, ctx *svc.ServiceContext) {
 	server.GET("/healthz", func(c *gin.Context) {
-		c.String(200, "ok")
+		c.String(http.StatusOK, "ok")
 	})
 
 	internalRoutes := server.Group("/api/v1/internal")

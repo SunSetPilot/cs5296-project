@@ -1,6 +1,7 @@
 package pool
 
 import (
+	"bytes"
 	"os/exec"
 	"sync/atomic"
 )
@@ -37,13 +38,27 @@ func (p *CommandExecPool) Start() {
 				case command := <-p.In:
 					atomic.AddInt32(&p.running, 1)
 					cmd := exec.Command(command.Name, command.Args...)
-					out, err := cmd.CombinedOutput()
-					p.Out <- &CommandResult{
-						ID:     command.ID,
-						Result: out,
-						Err:    err,
+					stdout := bytes.NewBuffer(nil)
+					stderr := bytes.NewBuffer(nil)
+					cmd.Stdout = stdout
+					cmd.Stderr = stderr
+					err := cmd.Run()
+					if err != nil {
+						p.Out <- &CommandResult{
+							ID:     command.ID,
+							Result: stderr.Bytes(),
+							Err:    err,
+						}
+						atomic.AddInt32(&p.running, -1)
+						continue
+					} else {
+						p.Out <- &CommandResult{
+							ID:     command.ID,
+							Result: stdout.Bytes(),
+							Err:    nil,
+						}
+						atomic.AddInt32(&p.running, -1)
 					}
-					atomic.AddInt32(&p.running, -1)
 				}
 			}
 		}()
